@@ -29,11 +29,11 @@ GEM
       rb-inotify (>= 0.9.7)
     lumberjack (1.0.12)
     method_source (0.9.0)
-    narray (0.6.1.2)
     nenv (0.3.0)
     notiffany (0.1.1)
       nenv (~> 0.1)
       shellany (~> 0.0)
+    numo-narray (0.9.1.1)
     pry (0.11.3)
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
@@ -64,7 +64,7 @@ PLATFORMS
 DEPENDENCIES
   bundler (~> 1.16)
   guard-rspec
-  narray (~> 0.6.1.2)
+  numo-narray (~> 0.9.1.1)
   pry
   rake (~> 10.0)
   rspec (~> 3.0)
