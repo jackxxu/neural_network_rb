@@ -5,23 +5,24 @@ RSpec.describe TensorflowRb do
     let(:result) { TensorflowRb.sigmoid(x) }
 
     context 'negative infinity' do
-      let(:x) { -10000 }
+      let(:x) { Numo::DFloat[-10000] }
       it 'outputs close to 0' do
-        expect(result).to be < 0.000001
+        expect(result[0]).to be < 0.000001
       end
     end
 
+
     context 'positive infinity' do
-      let(:x) { 10000 }
+      let(:x) { Numo::DFloat[10000] }
       it 'outputs close to 1' do
-        expect(result).to be > 0.99999999
+        expect(result[0]).to be > 0.99999999
       end
     end
 
     context 'zero' do
-      let(:x) { 0 }
+      let(:x) { Numo::DFloat[0] }
       it 'outputs 0.5' do
-        expect(result).to be(0.5) 
+        expect(result[0]).to be(0.5) 
       end
     end
   end
@@ -31,23 +32,23 @@ RSpec.describe TensorflowRb do
     let(:result) { TensorflowRb.sigmoid_prime(x) }
 
     context 'negative infinity' do
-      let(:x) { -10000 }
+      let(:x) { Numo::DFloat[-10000] }
       it 'outputs close to 0' do
-        expect(result).to be < 0.000001
+        expect(result[0]).to be < 0.000001
       end
     end
 
     context 'positive infinity' do
-      let(:x) { 10000 }
+      let(:x) { Numo::DFloat[10000] }
       it 'outputs close to 0' do
-        expect(result).to be < 0.000001
+        expect(result[0]).to be < 0.000001
       end
     end
 
     context 'zero' do
-      let(:x) { 0 }
+      let(:x) { Numo::DFloat[0] }
       it 'calculate sigmoid output' do
-        expect(result).to be(0.25) 
+        expect(result[0]).to be(0.25) 
       end
     end
   end
