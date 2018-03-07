@@ -7,7 +7,7 @@ RSpec.describe TensorflowRb::NeuralNetwork do
     let(:y) { Numo::DFloat[[0],   [1],   [1],   [0]] }
     let(:network) { TensorflowRb::NeuralNetwork.new(neuron_count, learning_rate)}
 
-    context 'train for 2 epochs' do
+    context 'train for 100 epochs' do
       before do        
         network.input = x
         network.target = y
@@ -32,7 +32,7 @@ RSpec.describe TensorflowRb::NeuralNetwork do
       end
 
       it 'reduces the error for each step' do 
-        epochs.times {network.train() {|x|  TensorflowRb.l2error(network.target, network.output) if network.epoch%1000 == 0  }}
+        epochs.times {network.train()} 
         expect(TensorflowRb.l2error(network.target, network.output)).to be < 0.65
       end 
     end    
