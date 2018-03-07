@@ -1,4 +1,5 @@
 require "open-uri"
+require 'zlib'
 
 module TensorflowRb
 
@@ -29,5 +30,46 @@ module TensorflowRb
     def initialize()
       
     end
+
+    def training_labels
+      labels(FILE_NAMES[1])
+    end
+
+    def test_labels
+      labels(FILE_NAMES[3])
+    end
+
+    def training_images
+      images(FILE_NAMES[0])
+    end
+
+    def test_images
+      images(FILE_NAMES[2])
+    end
+
+    private 
+      def images(file_name)
+        images = []
+        Zlib::GzipReader.open(file_name) do |f|
+          _, n_images = f.read(8).unpack('N2')
+          n_rows, n_cols = f.read(8).unpack('N2')
+          
+          n_images.times do
+            images << f.read(n_rows * n_cols).unpack('C*')
+          end
+        end
+        Numo::Int8.cast(images)  
+      end
+
+      def labels(file_name)
+        labels = nil
+        Zlib::GzipReader.open(file_name) do |f|
+          _, @n_labels = f.read(8).unpack('N2')
+          labels = f.read(@n_labels).unpack('C*')
+        end
+        Numo::Int8.cast(labels)
+      end
+
+
   end
 end
