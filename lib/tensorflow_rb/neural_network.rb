@@ -38,7 +38,7 @@ module TensorflowRb
       @w_hidden += @input.transpose.dot(dH)
 
       @epoch += 1 
-      yield self
+      yield self if block_given?
     end
 
   end
