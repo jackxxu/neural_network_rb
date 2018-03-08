@@ -54,7 +54,7 @@ module TensorflowRb
             images << f.read(n_rows * n_cols).unpack('C*')
           end
         end
-        Numo::Int8.cast(images)  
+        Numo::Int16.cast(images)  
       end
 
       def labels(file_name)
@@ -63,7 +63,7 @@ module TensorflowRb
           _, @n_labels = f.read(8).unpack('N2')
           labels = f.read(@n_labels).unpack('C*')
         end
-        Numo::Int8.cast(labels)
+        Numo::Int16.cast(labels)
       end
 
   end

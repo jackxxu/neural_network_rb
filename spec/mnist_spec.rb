@@ -26,7 +26,7 @@ RSpec.describe TensorflowRb::MNIST do
   end
 
 
-  describe '#training_images', focus: true do
+  describe '#training_images' do
     let(:training_images) { @mist.training_images }
 
     it 'has the 60000 training images of 784 bits each' do 
@@ -43,7 +43,7 @@ RSpec.describe TensorflowRb::MNIST do
   end
 
 
-  describe '#test_images', focus: true do
+  describe '#test_images' do
     let(:test_images) { @mist.test_images }
 
     it 'has the 10000 test images of 784 bits each' do 

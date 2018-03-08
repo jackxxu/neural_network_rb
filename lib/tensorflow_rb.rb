@@ -1,5 +1,6 @@
 require 'numo/narray'
 require 'tensorflow_rb/narray'
+require 'tensorflow_rb/mnist_image'
 require 'tensorflow_rb/mnist'
 require "tensorflow_rb/version"
 require 'tensorflow_rb/softmax'
