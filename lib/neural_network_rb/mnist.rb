@@ -37,13 +37,24 @@ module NeuralNetworkRb
         end
     end
 
-    attr_accessor :labels, :data
+    attr_accessor :labels, :data, :validation_data, :validation_labels
 
     def initialize(data_file, label_file)
-      @data_file = data_file
-      @label_file = label_file
-      @labels = get_labels(@label_file)
-      @data = get_images(@data_file)
+      data_file = data_file
+      label_file = label_file
+      @labels = get_labels(label_file)
+      @data = get_images(data_file)
+    end
+    
+    def shuffle!
+      @data, @labels = NeuralNetworkRb.shuffle(@data, @labels)
+      self
+    end
+
+    def partition!(train_ratio)
+      @data, @validation_data = NeuralNetworkRb.split(@data, train_ratio)
+      @labels, @validation_labels = NeuralNetworkRb.split(@labels, train_ratio)
+      self
     end
 
     private 

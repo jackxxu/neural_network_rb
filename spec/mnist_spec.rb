@@ -1,6 +1,6 @@
-RSpec.describe NeuralNetworkRb::MNIST, focus: true do
+RSpec.describe NeuralNetworkRb::MNIST do
 
-  context 'downloads training images and labels' do
+  describe 'training data' do
     before do
       @training_set = NeuralNetworkRb::MNIST.training_set        
     end
@@ -22,6 +22,45 @@ RSpec.describe NeuralNetworkRb::MNIST, focus: true do
     it 'has the 60000 training images of 784 bits each' do 
       expect(@training_set.data.shape).to eql([60000, 784])
     end
+  
+    describe '#shuffles' do
+      before do
+        @pre_shuffle_data = @training_set.data[0..5, true].copy
+        @pre_shuffle_labels = @training_set.labels[0..5].copy
+        @training_set.shuffle!
+      end
+
+      it 'changes the order of the data' do
+        expect(@training_set.data[0..5, true]).not_to eql(@pre_shuffle_data)
+      end
+
+      it 'changes the order of the labels' do
+        expect(@training_set.labels[0..5]).not_to eql(@pre_shuffle_labels)
+      end
+    end
+
+    describe '#partition', focus: true do
+      before do
+        @training_set.partition!(0.9)
+      end
+
+      it 'changes the order of the data' do
+        expect(@training_set.data.shape).to eq([54000, 784])
+      end
+
+      it 'changes the shape of the labels' do
+        expect(@training_set.labels.shape).to eq([54000])
+      end
+
+      it 'creates validation data' do
+        expect(@training_set.validation_data.shape).to eq([6000, 784])        
+      end
+
+      it 'creates validation labels' do
+        expect(@training_set.validation_labels.shape).to eq([6000])        
+      end
+    end
+
   end
 
   context 'downloads test images and labels' do
