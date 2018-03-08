@@ -7,19 +7,29 @@ module NeuralNetworkRb
 
     N_FEATURES = 28 * 28
     N_CLASSES = 10
-    FILE_NAMES = %w(train-images-idx3-ubyte.gz train-labels-idx1-ubyte.gz t10k-images-idx3-ubyte.gz t10k-labels-idx1-ubyte.gz)
+    TRAIN_FILE_NAMES = %w(train-images-idx3-ubyte.gz train-labels-idx1-ubyte.gz)
+    TEST_FILE_NAMES = %w(t10k-images-idx3-ubyte.gz t10k-labels-idx1-ubyte.gz)
     ROOT_URL = 'http://yann.lecun.com/exdb/mnist/'
 
     class << self
-      def download!
-        FILE_NAMES.each do |name|
-          url = "#{ROOT_URL}#{name}"
-          fetch_file(name, url)
-        end
-        self.new
+
+      def training_set
+        download(TRAIN_FILE_NAMES)        
       end
 
-      private
+      def test_set
+        download(TEST_FILE_NAMES)        
+      end
+
+      private 
+        def download(files)
+          files.each do |name|
+            url = "#{ROOT_URL}#{name}"
+            fetch_file(name, url)
+          end
+          self.new(*files)
+        end
+
         def fetch_file(filePath, url)
           File.open(filePath, "w") do |output|
             IO.copy_stream(open(url), output)
@@ -27,24 +37,17 @@ module NeuralNetworkRb
         end
     end
 
-    def training_labels
-      labels(FILE_NAMES[1])
-    end
+    attr_accessor :labels, :data
 
-    def test_labels
-      labels(FILE_NAMES[3])
-    end
-
-    def training_images
-      images(FILE_NAMES[0])
-    end
-
-    def test_images
-      images(FILE_NAMES[2])
+    def initialize(data_file, label_file)
+      @data_file = data_file
+      @label_file = label_file
+      @labels = get_labels(@label_file)
+      @data = get_images(@data_file)
     end
 
     private 
-      def images(file_name)
+      def get_images(file_name)
         images = []
         Zlib::GzipReader.open(file_name) do |f|
           _, n_images = f.read(8).unpack('N2')
@@ -57,7 +60,7 @@ module NeuralNetworkRb
         Numo::Int16.cast(images)  
       end
 
-      def labels(file_name)
+      def get_labels(file_name)
         labels = nil
         Zlib::GzipReader.open(file_name) do |f|
           _, @n_labels = f.read(8).unpack('N2')

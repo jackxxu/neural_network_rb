@@ -1,56 +1,52 @@
-RSpec.describe NeuralNetworkRb::MNIST do
+RSpec.describe NeuralNetworkRb::MNIST, focus: true do
 
-  before do
-    @mist = NeuralNetworkRb::MNIST.download!
-  end
-
-  describe '.download' do
+  context 'downloads training images and labels' do
+    before do
+      @training_set = NeuralNetworkRb::MNIST.training_set        
+    end
 
     it 'download file from the mnist site' do
-      NeuralNetworkRb::MNIST::FILE_NAMES.each do |file|
+      NeuralNetworkRb::MNIST::TRAIN_FILE_NAMES.each do |file|
         expect(File.exists?(file)).to be true
       end
     end
-
+      
     it 'returns an instance of MNIST' do
-      expect(@mist).to be_instance_of(NeuralNetworkRb::MNIST)
+      expect(@training_set).to be_instance_of(NeuralNetworkRb::MNIST)
     end
-  end
-
-  describe '#training_labels' do
-    let(:training_labels) { @mist.training_labels }
 
     it 'has the 60000 training labels' do 
-      expect(training_labels.shape).to eql([60000])
+      expect(@training_set.labels.shape).to eql([60000])
     end
-  end
-
-
-  describe '#training_images' do
-    let(:training_images) { @mist.training_images }
 
     it 'has the 60000 training images of 784 bits each' do 
-      expect(training_images.shape).to eql([60000, 784])
+      expect(@training_set.data.shape).to eql([60000, 784])
     end
   end
 
-  describe '#test_labels' do
-    let(:test_labels) { @mist.test_labels }
+  context 'downloads test images and labels' do
+    before do
+      @test_set = NeuralNetworkRb::MNIST.test_set        
+    end
+
+    it 'download file from the mnist site' do
+      NeuralNetworkRb::MNIST::TEST_FILE_NAMES.each do |file|
+        expect(File.exists?(file)).to be true
+      end
+    end
+      
+    it 'returns an instance of MNIST' do
+      expect(@test_set).to be_instance_of(NeuralNetworkRb::MNIST)
+    end
 
     it 'has the 10000 test labels' do 
-      expect(test_labels.shape).to eql([10000])
+      expect(@test_set.labels.shape).to eql([10000])
     end
-  end
-
-
-  describe '#test_images' do
-    let(:test_images) { @mist.test_images }
 
     it 'has the 10000 test images of 784 bits each' do 
-      expect(test_images.shape).to eql([10000, 784])
+      expect(@test_set.data.shape).to eql([10000, 784])
     end
   end
-
 
 end
 
