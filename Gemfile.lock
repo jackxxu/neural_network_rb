@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    tensorflow_rb (0.1.0)
+    neural_network_rb (0.1.0)
       chunky_png (~> 1.3.10)
       numo-narray (~> 0.9.1.1)
 
@@ -67,10 +67,10 @@ PLATFORMS
 DEPENDENCIES
   bundler (~> 1.16)
   guard-rspec
+  neural_network_rb!
   pry
   rake (~> 10.0)
   rspec (~> 3.0)
-  tensorflow_rb!
   terminal-notifier-guard
 
 BUNDLED WITH

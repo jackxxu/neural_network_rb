@@ -1,4 +1,4 @@
-RSpec.describe TensorflowRb do
+RSpec.describe NeuralNetworkRb do
 
   describe 'l2error' do
     context 'y and y hat are the same' do
@@ -6,7 +6,7 @@ RSpec.describe TensorflowRb do
       let(:y_hat) { Numo::DFloat[[0],   [1],   [1],   [0]] }
       
       it 'produces 0 error' do
-        expect(TensorflowRb.l2error(y_hat, y)).to be_within(0.0000001).of(0)
+        expect(NeuralNetworkRb.l2error(y_hat, y)).to be_within(0.0000001).of(0)
       end
     end
 
@@ -15,7 +15,7 @@ RSpec.describe TensorflowRb do
       let(:y_hat) { Numo::DFloat[[0],   [1],   [1],   [0.5]] }
       
       it 'produces 0 error' do
-        expect(TensorflowRb.l2error(y_hat, y)).to be_within(0.0000001).of(0.25)
+        expect(NeuralNetworkRb.l2error(y_hat, y)).to be_within(0.0000001).of(0.25)
       end
     end
   end
@@ -26,7 +26,7 @@ RSpec.describe TensorflowRb do
       let(:y_hat) { Numo::DFloat[[0],   [1],   [1],   [0]] }
       
       it 'produces 0 error' do
-        expect(TensorflowRb.l1error(y_hat, y)).to be_within(0.0000001).of(0)
+        expect(NeuralNetworkRb.l1error(y_hat, y)).to be_within(0.0000001).of(0)
       end
     end
 
@@ -35,7 +35,7 @@ RSpec.describe TensorflowRb do
       let(:y_hat) { Numo::DFloat[[0],   [1],   [1],   [0.5]] }
       
       it 'produces 0 error' do
-        expect(TensorflowRb.l1error(y_hat, y)).to be_within(0.0000001).of(0.5)
+        expect(NeuralNetworkRb.l1error(y_hat, y)).to be_within(0.0000001).of(0.5)
       end
     end
     
@@ -47,7 +47,7 @@ RSpec.describe TensorflowRb do
 
 
     it 'produces a valid entropy value' do
-      expect(TensorflowRb.cross_entropy(values, labels)).to eql(0.7135581778200729)
+      expect(NeuralNetworkRb.cross_entropy(values, labels)).to eql(0.7135581778200729)
     end
   end
 

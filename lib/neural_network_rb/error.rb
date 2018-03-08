@@ -1,4 +1,4 @@
-module TensorflowRb
+module NeuralNetworkRb
   class << self
     def l2error(v1, v2)
       ((v1 - v2) ** 2).sum

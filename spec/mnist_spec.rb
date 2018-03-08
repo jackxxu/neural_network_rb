@@ -1,19 +1,19 @@
-RSpec.describe TensorflowRb::MNIST do
+RSpec.describe NeuralNetworkRb::MNIST do
 
   before do
-    @mist = TensorflowRb::MNIST.download!
+    @mist = NeuralNetworkRb::MNIST.download!
   end
 
   describe '.download' do
 
     it 'download file from the mnist site' do
-      TensorflowRb::MNIST::FILE_NAMES.each do |file|
+      NeuralNetworkRb::MNIST::FILE_NAMES.each do |file|
         expect(File.exists?(file)).to be true
       end
     end
 
     it 'returns an instance of MNIST' do
-      expect(@mist).to be_instance_of(TensorflowRb::MNIST)
+      expect(@mist).to be_instance_of(NeuralNetworkRb::MNIST)
     end
   end
 

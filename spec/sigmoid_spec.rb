@@ -1,8 +1,8 @@
-RSpec.describe TensorflowRb do
+RSpec.describe NeuralNetworkRb do
 
-  describe 'TensorflowRb.sigmoid' do
+  describe 'NeuralNetworkRb.sigmoid' do
 
-    let(:result) { TensorflowRb.sigmoid(x) }
+    let(:result) { NeuralNetworkRb.sigmoid(x) }
 
     context 'negative infinity' do
       let(:x) { Numo::DFloat[-10000] }
@@ -27,9 +27,9 @@ RSpec.describe TensorflowRb do
     end
   end
 
-  describe 'TensorflowRb.sigmoid_prime' do
+  describe 'NeuralNetworkRb.sigmoid_prime' do
 
-    let(:result) { TensorflowRb.sigmoid_prime(x) }
+    let(:result) { NeuralNetworkRb.sigmoid_prime(x) }
 
     context 'negative infinity' do
       let(:x) { Numo::DFloat[-10000] }

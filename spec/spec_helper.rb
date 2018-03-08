@@ -1,5 +1,5 @@
 require "bundler/setup"
-require "tensorflow_rb"
+require "neural_network_rb"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

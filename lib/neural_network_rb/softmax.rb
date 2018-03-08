@@ -1,4 +1,4 @@
-module TensorflowRb
+module NeuralNetworkRb
 
   def self.softmax(array)
     exp_array = array.map {|x| Math.exp(x)}

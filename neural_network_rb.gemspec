@@ -1,16 +1,16 @@
 
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "tensorflow_rb/version"
+require "neural_network_rb/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "tensorflow_rb"
-  spec.version       = TensorflowRb::VERSION
+  spec.name          = "neural_network_rb"
+  spec.version       = NeuralNetworkRb::VERSION
   spec.authors       = ["Jack Xu"]
   spec.email         = ["jackxxu@gmail.com"]
 
-  spec.summary       = %q{tensorflow ruby implementaiton}
-  spec.homepage      = "https://github.com/jackxxu/tensorflow_rb"
+  spec.summary       = %q{neural network ruby implementaiton}
+  spec.homepage      = "https://github.com/jackxxu/neural_network_rb"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.

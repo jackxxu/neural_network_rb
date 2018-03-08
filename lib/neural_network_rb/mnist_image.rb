@@ -1,6 +1,6 @@
 require 'chunky_png'
 
-module TensorflowRb
+module NeuralNetworkRb
   class MNISTImage
     def initialize(pixels)
       @pixels = pixels

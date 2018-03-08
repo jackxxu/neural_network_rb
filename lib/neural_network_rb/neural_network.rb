@@ -1,4 +1,4 @@
-module TensorflowRb
+module NeuralNetworkRb
 
   class NeuralNetwork
 
@@ -24,7 +24,7 @@ module TensorflowRb
 
     def train()
       # forward
-      @hidden = TensorflowRb.sigmoid(@input.dot(@w_hidden))
+      @hidden = NeuralNetworkRb.sigmoid(@input.dot(@w_hidden))
       @output = @hidden.dot(@w_output)
 
       # calculate error
@@ -34,7 +34,7 @@ module TensorflowRb
       dZ = error * @learning_rate
 
       @w_output += @hidden.transpose.dot(dZ)
-      dH = dZ.dot(@w_output.transpose) * TensorflowRb.sigmoid_prime(@hidden)
+      dH = dZ.dot(@w_output.transpose) * NeuralNetworkRb.sigmoid_prime(@hidden)
       @w_hidden += @input.transpose.dot(dH)
 
       @epoch += 1 

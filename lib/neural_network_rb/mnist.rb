@@ -1,7 +1,7 @@
 require "open-uri"
 require 'zlib'
 
-module TensorflowRb
+module NeuralNetworkRb
 
   class MNIST
 

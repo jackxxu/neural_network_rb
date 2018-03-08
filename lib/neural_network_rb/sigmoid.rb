@@ -1,4 +1,4 @@
-module TensorflowRb
+module NeuralNetworkRb
 
   E = Math.exp(1)
 
