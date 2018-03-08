@@ -27,10 +27,6 @@ module TensorflowRb
         end
     end
 
-    def initialize()
-      
-    end
-
     def training_labels
       labels(FILE_NAMES[1])
     end
@@ -69,7 +65,6 @@ module TensorflowRb
         end
         Numo::Int8.cast(labels)
       end
-
 
   end
 end

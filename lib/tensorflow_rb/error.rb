@@ -1,11 +1,11 @@
 module TensorflowRb
+  class << self
+    def l2error(v1, v2)
+      ((v1 - v2) ** 2).sum
+    end
 
-  def l2error(v1, v2)
-    ((v1 - v2) ** 2).sum
+    def l1error(v1, v2)
+      (v1 - v2).abs.sum
+    end
   end
-
-  def l1error(v1, v2)
-    (v1 - v2).abs.sum
-  end
-
 end
