@@ -1,6 +1,6 @@
 RSpec.describe NeuralNetworkRb::MNIST do
 
-  context 'saves the image file as PNG', focus: true do
+  context 'saves the image file as PNG' do
     let(:file_name) { 'test.png' }
     before do
       @mist = NeuralNetworkRb::MNIST.training_set
