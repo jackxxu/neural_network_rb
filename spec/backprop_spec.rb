@@ -24,7 +24,6 @@ RSpec.describe NeuralNetworkRb do
       dH = dZ.dot(w_output.transpose) * NeuralNetworkRb.sigmoid_prime(hidden)
       w_hidden += x.transpose.dot(dH)
 
-      p w_hidden
     end
   end
 end

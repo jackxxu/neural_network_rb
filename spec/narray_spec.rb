@@ -6,7 +6,6 @@ RSpec.describe NeuralNetworkRb::NeuralNetwork do
 
     it 'keep the same array length' do
       result = NeuralNetworkRb.shuffle(data, target)
-      p result
       expect(data.shape).to eql(result[0].shape)
       expect(target.shape).to eql(result[1].shape)
     end
