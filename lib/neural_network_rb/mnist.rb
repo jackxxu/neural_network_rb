@@ -39,11 +39,18 @@ module NeuralNetworkRb
 
     attr_accessor :labels, :data, :validation_data, :validation_labels
 
-    def initialize(data_file, label_file)
-      data_file = data_file
-      label_file = label_file
-      @labels = get_labels(label_file)
-      @data = get_images(data_file)
+    def initialize(data_file = nil, label_file = nil)
+      @labels = get_labels(label_file) if label_file
+      @data   = get_images(data_file)  if data_file
+    end
+
+    def clone
+      self.class.new.tap do |m|
+        m.data = self.data.copy
+        m.labels = self.labels.copy
+        m.validation_data = self.validation_data.copy if self.validation_data
+        m.validation_labels = self.validation_labels.copy if self.validation_labels
+      end
     end
     
     def shuffle!
@@ -54,6 +61,11 @@ module NeuralNetworkRb
     def partition!(train_ratio)
       @data, @validation_data = NeuralNetworkRb.split(@data, train_ratio)
       @labels, @validation_labels = NeuralNetworkRb.split(@labels, train_ratio)
+      self
+    end
+
+    def embed_labels!(algorithm, class_count)
+      self.labels = NeuralNetworkRb::Embeddings.send(:one_hot, @labels, class_count)
       self
     end
 
