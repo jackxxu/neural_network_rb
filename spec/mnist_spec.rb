@@ -39,7 +39,7 @@ RSpec.describe NeuralNetworkRb::MNIST do
       end
     end
 
-    describe '#partition', focus: true do
+    describe '#partition' do
       before do
         @training_set.partition!(0.9)
       end
@@ -63,7 +63,7 @@ RSpec.describe NeuralNetworkRb::MNIST do
 
   end
 
-  context 'downloads test images and labels' do
+  describe 'test data' do
     before do
       @test_set = NeuralNetworkRb::MNIST.test_set        
     end
