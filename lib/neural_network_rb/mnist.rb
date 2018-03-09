@@ -69,6 +69,18 @@ module NeuralNetworkRb
       self
     end
 
+    def batches(batches_count)
+      total_size = self.data.shape[0]
+      batch_size = (total_size.to_f/batches_count).ceil
+      Array.new(batches_count).tap do |result|
+        batches_count.times do |i|
+          batch_data   = self.data[batch_size*i..batch_size*(i+1)-1, true]
+          batch_labels = self.labels[batch_size*i..batch_size*(i+1)-1]
+          result[i] = [batch_data, batch_labels]
+        end
+      end
+    end
+
     private 
       def get_images(file_name)
         images = []

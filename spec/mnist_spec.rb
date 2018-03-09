@@ -23,6 +23,32 @@ RSpec.describe NeuralNetworkRb::MNIST do
       expect(@training_set.data.shape).to eql([60000, 784])
     end
 
+    describe '#batchize' do
+      let(:batches_count) { 300 }
+      before do 
+        @batches = @training_set.batches(batches_count)
+      end
+
+      it 'create a batches array of proper size' do
+        expect(@batches.length).to be(batches_count)
+      end
+
+      it 'has each array element  data and labels' do
+        expect(@batches[0].length).to be(2)        
+      end
+
+      it 'has data element of proper size' do
+        expect(@batches[0][0].shape).to eql([200, 784])        
+        expect(@batches[299][0].shape).to eql([200, 784])        
+      end    
+
+      it 'has labels element of proper size' do
+        expect(@batches[0][1].shape).to eql([200])        
+        expect(@batches[299][1].shape).to eql([200])        
+      end    
+
+    end
+
     describe '#one_hot embedding labels' do
       before do 
         @training_set2 = @training_set.clone
@@ -102,13 +128,22 @@ RSpec.describe NeuralNetworkRb::MNIST do
     end
   end
 
-  describe 'train', focus: true do
+  describe 'train' do
+    let(:embedding) { :one_hot }
+    let(:label_classes) { 10 }
+    let(:epochs) { 300 }
     before do
-      @training_set = NeuralNetworkRb::MNIST.training_set.shuffle!.partition!(0.9)
+      @training_set = NeuralNetworkRb::MNIST.training_set
+                                            .embed_labels!(embedding, label_classes)
+                                            .shuffle!
+                                            .partition!(0.9)
     end
 
     it 'does something' do
-      
+      # p @training_set.validation_labels[0, true]
+      epochs.times do |epoch|
+        puts epoch
+      end
     end
   end
 
