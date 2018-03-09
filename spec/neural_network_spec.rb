@@ -15,9 +15,9 @@ RSpec.describe NeuralNetworkRb::NeuralNetwork do
 
       it 'reduces the error for each step' do 
         error1, error2 = 0, 0
-        network.train() {|n| error1 = NeuralNetworkRb.l2error(n.target, n.output)}
-        100.times { network.train() }
-        network.train() {|n| error2 = NeuralNetworkRb.l2error(n.target, n.output)}
+        network.fit() {|n| error1 = NeuralNetworkRb.l2error(n.target, n.output)}
+        100.times { network.fit() }
+        network.fit() {|n| error2 = NeuralNetworkRb.l2error(n.target, n.output)}
   
         expect(error1).to be > error2
       end
@@ -32,7 +32,7 @@ RSpec.describe NeuralNetworkRb::NeuralNetwork do
       end
 
       it 'reduces the error for each step' do 
-        epochs.times {network.train()} 
+        epochs.times {network.fit()} 
         expect(NeuralNetworkRb.l2error(network.target, network.output)).to be < 0.65
       end 
     end    

@@ -22,7 +22,7 @@ module NeuralNetworkRb
       @epoch = 0
     end
 
-    def train()
+    def fit()
       # forward
       @hidden = NeuralNetworkRb.sigmoid(@input.dot(@w_hidden))
       @output = @hidden.dot(@w_output)

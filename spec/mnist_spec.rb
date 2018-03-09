@@ -128,22 +128,25 @@ RSpec.describe NeuralNetworkRb::MNIST do
     end
   end
 
-  describe 'train' do
+  describe 'train', focus: true do
     let(:embedding) { :one_hot }
     let(:label_classes) { 10 }
     let(:epochs) { 300 }
+    let(:neuron_count)  { 20 }
+    let(:learning_rate) { 0.05 }
     before do
       @training_set = NeuralNetworkRb::MNIST.training_set
                                             .embed_labels!(embedding, label_classes)
                                             .shuffle!
                                             .partition!(0.9)
+      @network = NeuralNetworkRb::NeuralNetwork.new(neuron_count, learning_rate)
     end
 
     it 'does something' do
-      # p @training_set.validation_labels[0, true]
-      epochs.times do |epoch|
-        puts epoch
-      end
+      # @training_set.batches(epochs).each do |batch|
+      #   data, labels = *batch
+      #   puts data.shape.inspect
+      # end
     end
   end
 
