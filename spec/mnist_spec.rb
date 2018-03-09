@@ -50,17 +50,22 @@ RSpec.describe NeuralNetworkRb::MNIST do
     end
 
     describe '#one_hot embedding labels' do
+      let(:labels) { Numo::Int16[0, 1, 7, 3] }
       before do 
-        @training_set2 = @training_set.clone
-        @training_set2.embed_labels!(:one_hot, 10)
+        @embeddings = NeuralNetworkRb::MNIST.embed_labels(labels, :one_hot, 10)
       end
 
-      it 'changes the labels shape' do
-        expect(@training_set2.labels.shape).to eq([60000, 10])        
+      it 'add one dimension of 10 columns' do
+        expect(@embeddings.shape).to eq([4, 10])        
       end
 
-      it 'each one label has an 1 value' do
-        expect(@training_set2.labels[0, true].sum).to eq(1)                
+      it 'embeds proper value' do
+        expect(@embeddings.to_a).to eq([
+          [1, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+          [0, 1, 0, 0, 0, 0, 0, 0, 0, 0 ],
+          [0, 0, 0, 0, 0, 0, 0, 1, 0, 0 ],
+          [0, 0, 0, 1, 0, 0, 0, 0, 0, 0 ]
+        ])                
       end
     end
 
@@ -128,27 +133,34 @@ RSpec.describe NeuralNetworkRb::MNIST do
     end
   end
 
-  describe 'train', focus: true do
-    let(:embedding) { :one_hot }
-    let(:label_classes) { 10 }
-    let(:epochs) { 300 }
-    let(:neuron_count)  { 20 }
-    let(:learning_rate) { 0.05 }
-    before do
-      @training_set = NeuralNetworkRb::MNIST.training_set
-                                            .embed_labels!(embedding, label_classes)
-                                            .shuffle!
-                                            .partition!(0.9)
-      @network = NeuralNetworkRb::NeuralNetwork.new(neuron_count, learning_rate)
-    end
+  # describe 'train', focus: true do
+  #   let(:embedding)     { :one_hot }
+  #   let(:label_classes) { 10 }
+  #   let(:epochs)        { 300 }
+  #   let(:neuron_count)  { 20 }
+  #   let(:learning_rate) { 0.05 }
+  #   before do
+  #     @training_set = NeuralNetworkRb::MNIST.training_set
+  #                                           .shuffle!
+  #                                           .partition!(0.9)
+  #     @network = NeuralNetworkRb::NeuralNetwork.new(neuron_count, learning_rate)
+  #   end
 
-    it 'does something' do
-      # @training_set.batches(epochs).each do |batch|
-      #   data, labels = *batch
-      #   puts data.shape.inspect
-      # end
-    end
-  end
+  #   it 'runs the training loop' do
+  #     data, labels = *(@training_set.batches(90)[10])
+  #     @network.input = data
+
+  #     @network.target = NeuralNetworkRb::MNIST.embed_labels(labels, :one_hot, 10)
+  #     p labels
+  #     error1, error2 = nil, nil
+  #     @network.fit() {|n| error1 = NeuralNetworkRb.l2error(n.target, n.output)}
+  #     150.times { @network.fit() }
+  #     @network.fit() {|n| error2 = NeuralNetworkRb.l2error(n.target, n.output)}
+  #     # require 'pry'
+  #     # binding.pry
+  #     puts "error1 #{error1} error2 #{error2}"
+  #   end
+  # end
 
 end
 

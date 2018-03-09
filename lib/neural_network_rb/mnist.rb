@@ -21,6 +21,16 @@ module NeuralNetworkRb
         download(TEST_FILE_NAMES)        
       end
 
+      def display_image(narray)
+        narray.shape[0].times do |r|
+          puts narray[r*28..((r+1)*28-1)].to_a.inspect
+        end
+      end
+
+      def embed_labels(labels, algorithm, class_count)
+        NeuralNetworkRb::Embeddings.send(algorithm, labels, class_count)
+      end
+  
       private 
         def download(files)
           files.each do |name|
@@ -35,6 +45,7 @@ module NeuralNetworkRb
             IO.copy_stream(open(url), output)
           end
         end
+
     end
 
     attr_accessor :labels, :data, :validation_data, :validation_labels
@@ -64,24 +75,22 @@ module NeuralNetworkRb
       self
     end
 
-    def embed_labels!(algorithm, class_count)
-      self.labels = NeuralNetworkRb::Embeddings.send(:one_hot, @labels, class_count)
-      self
-    end
 
     def batches(batches_count)
       total_size = self.data.shape[0]
       batch_size = (total_size.to_f/batches_count).ceil
       Array.new(batches_count).tap do |result|
         batches_count.times do |i|
-          batch_data   = self.data[batch_size*i..batch_size*(i+1)-1, true]
-          batch_labels = self.labels[batch_size*i..batch_size*(i+1)-1]
+          range = batch_size*i..batch_size*(i+1)-1
+          batch_data   = NeuralNetworkRb.rows(@data,   range) # self.data[batch_size*i..batch_size*(i+1)-1, true]
+          batch_labels = NeuralNetworkRb.rows(@labels, range) # self.labels[batch_size*i..batch_size*(i+1)-1]
           result[i] = [batch_data, batch_labels]
         end
       end
     end
 
     private 
+
       def get_images(file_name)
         images = []
         Zlib::GzipReader.open(file_name) do |f|

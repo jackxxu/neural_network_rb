@@ -27,8 +27,13 @@ module NeuralNetworkRb
       @hidden = NeuralNetworkRb.sigmoid(@input.dot(@w_hidden))
       @output = @hidden.dot(@w_output)
 
+      o = @output.shape[0].times.map {|i| NeuralNetworkRb.softmax(output[i, true])}
+      @output = Numo::NArray[*o]
+
       # calculate error
-      error = @target - @output
+      error_algorithm = :plain_diff
+      error = NeuralNetworkRb.send(error_algorithm, @target,  @output)
+      # error = @target - @output
 
       # backward 
       dZ = error * @learning_rate
