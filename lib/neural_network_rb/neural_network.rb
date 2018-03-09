@@ -16,10 +16,11 @@ module NeuralNetworkRb
       @w_output = Numo::DFloat.new(@neurons_count, output_width).rand
     end
 
-    def initialize(neurons_count, learning_rate)
+    def initialize(neurons_count, learning_rate, random_seed)
       @neurons_count = neurons_count
       @learning_rate = learning_rate
       @epoch = 0
+      Numo::NArray.srand(random_seed)
     end
 
     def fit()
