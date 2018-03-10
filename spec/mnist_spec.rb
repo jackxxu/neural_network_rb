@@ -133,34 +133,35 @@ RSpec.describe NeuralNetworkRb::MNIST do
     end
   end
 
-  # describe 'train', focus: true do
-  #   let(:embedding)     { :one_hot }
-  #   let(:label_classes) { 10 }
-  #   let(:epochs)        { 300 }
-  #   let(:neuron_count)  { 20 }
-  #   let(:learning_rate) { 0.05 }
-  #   before do
-  #     @training_set = NeuralNetworkRb::MNIST.training_set
-  #                                           .shuffle!
-  #                                           .partition!(0.9)
-  #     @network = NeuralNetworkRb::NeuralNetwork.new(neuron_count, learning_rate)
-  #   end
+  describe 'train', focus: true do
+    let(:embedding)     { :one_hot }
+    let(:label_classes) { 10 }
+    let(:epochs)        { 3000 }
+    let(:neuron_count)  { 5 }
+    let(:learning_rate) { 0.0005 }
+    let(:batches)       { 1 }
+    before do
+      @training_set = NeuralNetworkRb::MNIST.training_set
+                                            .shuffle!
+                                            .partition!(0.9)
+      @network = NeuralNetworkRb::NeuralNetwork.new(neuron_count, learning_rate, 4567)
+    end
 
-  #   it 'runs the training loop' do
-  #     data, labels = *(@training_set.batches(90)[10])
-  #     @network.input = data
+    it 'runs the training loop' do
+      data, labels = *(@training_set.batches(batches)[0])
+      @network.input = data
 
-  #     @network.target = NeuralNetworkRb::MNIST.embed_labels(labels, :one_hot, 10)
-  #     p labels
-  #     error1, error2 = nil, nil
-  #     @network.fit() {|n| error1 = NeuralNetworkRb.l2error(n.target, n.output)}
-  #     150.times { @network.fit() }
-  #     @network.fit() {|n| error2 = NeuralNetworkRb.l2error(n.target, n.output)}
-  #     # require 'pry'
-  #     # binding.pry
-  #     puts "error1 #{error1} error2 #{error2}"
-  #   end
-  # end
+      @network.target = NeuralNetworkRb::MNIST.embed_labels(labels, :one_hot, 10)
+      p labels
+      error1, error2 = nil, nil
+      @network.fit() {|n| error1 = NeuralNetworkRb.l2error(n.target, n.output)}
+      # epochs.times { @network.fit() }
+      # @network.fit() {|n| error2 = NeuralNetworkRb.l2error(n.target, n.output)}
+      # # require 'pry'
+      # # binding.pry
+      puts "size #{54000/batches} epochs #{epochs} error1 #{error1} error2 #{error2}"
+    end
+  end
 
 end
 

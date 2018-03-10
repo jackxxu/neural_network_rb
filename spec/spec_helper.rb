@@ -13,6 +13,6 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 
-  # config.filter_run :focus => true
+  config.filter_run :focus => true
 end
 
