@@ -29,6 +29,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "numo-narray", "~> 0.9.1.1"
+  spec.add_dependency "numo-linalg", "~> 0.1.1"
   spec.add_dependency "chunky_png", "~> 1.3.10"
 
   spec.add_development_dependency "bundler", "~> 1.16"

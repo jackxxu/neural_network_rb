@@ -1,4 +1,5 @@
 require 'numo/narray'
+require 'numo/linalg/autoloader'
 require 'neural_network_rb/embeddings/one_hot'
 require 'neural_network_rb/narray'
 require 'neural_network_rb/mnist_image'

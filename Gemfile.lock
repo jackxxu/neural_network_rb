@@ -3,6 +3,7 @@ PATH
   specs:
     neural_network_rb (0.1.0)
       chunky_png (~> 1.3.10)
+      numo-linalg (~> 0.1.1)
       numo-narray (~> 0.9.1.1)
 
 GEM
@@ -36,6 +37,8 @@ GEM
     notiffany (0.1.1)
       nenv (~> 0.1)
       shellany (~> 0.0)
+    numo-linalg (0.1.1)
+      numo-narray (>= 0.9.0.7)
     numo-narray (0.9.1.1)
     pry (0.11.3)
       coderay (~> 1.1.0)
