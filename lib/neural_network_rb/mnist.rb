@@ -34,8 +34,10 @@ module NeuralNetworkRb
       private 
         def download(files)
           files.each do |name|
-            url = "#{ROOT_URL}#{name}"
-            fetch_file(name, url)
+            if !File.exists?(name) 
+              url = "#{ROOT_URL}#{name}"
+              fetch_file(name, url)
+            end
           end
           self.new(*files)
         end
