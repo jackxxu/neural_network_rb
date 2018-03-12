@@ -27,8 +27,10 @@ module NeuralNetworkRb
       # forward
       @hidden = NeuralNetworkRb.sigmoid(Numo::Linalg.matmul(@input, @w_hidden))
 
-      @output = Numo::Linalg.matmul(@hidden, @w_output)
-      o = NeuralNetworkRb.softmax(@output)
+      @output = NeuralNetworkRb.softmax(Numo::Linalg.matmul(@hidden, @w_output))
+      # require 'pry'
+      # binding.pry
+      # o = NeuralNetworkRb.softmax(@output)
 
       # calculate error
       error_algorithm = :plain_diff
