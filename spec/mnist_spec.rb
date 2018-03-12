@@ -136,10 +136,10 @@ RSpec.describe NeuralNetworkRb::MNIST do
   describe 'train', focus: true do
     let(:embedding)     { :one_hot }
     let(:label_classes) { 10 }
-    let(:epochs)        { 3000 }
-    let(:neuron_count)  { 5 }
-    let(:learning_rate) { 0.0005 }
-    let(:batches)       { 1 }
+    let(:epochs)        { 1000 }
+    let(:neuron_count)  { 40 }
+    let(:learning_rate) { 0.0019 }
+    let(:batches)       { 30 }
     before do
       @training_set = NeuralNetworkRb::MNIST.training_set
                                             .shuffle!
@@ -150,16 +150,9 @@ RSpec.describe NeuralNetworkRb::MNIST do
     it 'runs the training loop' do
       data, labels = *(@training_set.batches(batches)[0])
       @network.input = data
+      @network.target = NeuralNetworkRb::MNIST.embed_labels(labels, :one_hot, label_classes)
 
-      @network.target = NeuralNetworkRb::MNIST.embed_labels(labels, :one_hot, 10)
-      p labels
-      error1, error2 = nil, nil
-      @network.fit() {|n| error1 = NeuralNetworkRb.l2error(n.target, n.output)}
-      # epochs.times { @network.fit() }
-      # @network.fit() {|n| error2 = NeuralNetworkRb.l2error(n.target, n.output)}
-      # # require 'pry'
-      # # binding.pry
-      puts "size #{54000/batches} epochs #{epochs} error1 #{error1} error2 #{error2}"
+      epochs.times { @network.fit() { |n| puts "#{n.epoch}: #{NeuralNetworkRb.accuracy(n.output, labels)}" if (n.epoch % 10 == 1)  } }
     end
   end
 

@@ -25,27 +25,21 @@ module NeuralNetworkRb
 
     def fit()
       # forward
-      t1 = Time.now
-      puts @input.shape.inspect
-      puts @w_hidden.shape.inspect
-      t = @input.dot(@w_hidden)
-      puts Time.now - t1
-      @hidden = NeuralNetworkRb.sigmoid(t)
-      @output = @hidden.dot(@w_output)
+      @hidden = NeuralNetworkRb.sigmoid(Numo::Linalg.matmul(@input, @w_hidden))
 
-      o = @output.shape[0].times.map {|i| NeuralNetworkRb.softmax(output[i, true])}
-      @output = Numo::NArray[*o]
+      @output = Numo::Linalg.matmul(@hidden, @w_output)
+      o = NeuralNetworkRb.softmax(@output)
+
       # calculate error
       error_algorithm = :plain_diff
       error = NeuralNetworkRb.send(error_algorithm, @target,  @output)
-      # error = @target - @output
 
       # backward 
       dZ = error * @learning_rate
 
-      @w_output += @hidden.transpose.dot(dZ)
-      dH = dZ.dot(@w_output.transpose) * NeuralNetworkRb.sigmoid_prime(@hidden)
-      @w_hidden += @input.transpose.dot(dH)
+      @w_output += Numo::Linalg.matmul(@hidden.transpose, dZ)
+      dH         = Numo::Linalg.matmul(dZ, @w_output.transpose) * NeuralNetworkRb.sigmoid_prime(@hidden)
+      @w_hidden += Numo::Linalg.matmul(@input.transpose, dH)
 
       @epoch += 1 
       yield self if block_given?
