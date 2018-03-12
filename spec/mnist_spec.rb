@@ -136,10 +136,10 @@ RSpec.describe NeuralNetworkRb::MNIST do
   describe 'train', focus: true do
     let(:embedding)     { :one_hot }
     let(:label_classes) { 10 }
-    let(:epochs)        { 1000 }
-    let(:neuron_count)  { 40 }
-    let(:learning_rate) { 0.0019 }
-    let(:batches)       { 30 }
+    let(:epochs)        { 2000 }
+    let(:neuron_count)  { 20 }
+    let(:learning_rate) { 0.001 }
+    let(:batches)       { 9 }
     before do
       @training_set = NeuralNetworkRb::MNIST.training_set
                                             .shuffle!
