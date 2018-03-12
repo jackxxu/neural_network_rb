@@ -15,5 +15,14 @@ module NeuralNetworkRb
     def cross_entropy(values, labels)
       - (labels * values.map {|x| Math.log(x)}).sum/values.ndim
     end
+
+    def accuracy(values, labels)
+      size = values.shape[0]
+      hits = 0
+      size.times.each do |i|
+        hits += 1 if labels[i] == values[i, true].max_index
+      end
+      hits.to_f/size
+    end
   end
 end
