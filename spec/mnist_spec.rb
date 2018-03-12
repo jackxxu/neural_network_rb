@@ -138,7 +138,7 @@ RSpec.describe NeuralNetworkRb::MNIST do
     let(:label_classes) { 10 }
     let(:epochs)        { 2000 }
     let(:neuron_count)  { 20 }
-    let(:learning_rate) { 0.001 }
+    let(:learning_rate) { 0.005 }
     let(:batches)       { 9 }
     before do
       @training_set = NeuralNetworkRb::MNIST.training_set

@@ -5,7 +5,7 @@ module NeuralNetworkRb
     attr_reader :target, :output, :epoch
     
     def input=(input)
-      @input = input
+      @input = input/255.0
       input_width = input.shape[1]
       @w_hidden = Numo::DFloat.new(input_width,  @neurons_count).rand
     end
@@ -28,9 +28,6 @@ module NeuralNetworkRb
       @hidden = NeuralNetworkRb.sigmoid(Numo::Linalg.matmul(@input, @w_hidden))
 
       @output = NeuralNetworkRb.softmax(Numo::Linalg.matmul(@hidden, @w_output))
-      # require 'pry'
-      # binding.pry
-      # o = NeuralNetworkRb.softmax(@output)
 
       # calculate error
       error_algorithm = :plain_diff
