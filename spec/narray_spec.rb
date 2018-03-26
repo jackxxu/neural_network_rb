@@ -5,7 +5,7 @@ RSpec.describe NeuralNetworkRb::NeuralNetwork do
     let(:target) { Numo::DFloat.new(10).seq }
 
     it 'keep the same array length' do
-      result = NeuralNetworkRb.shuffle(data, target)
+      result = NeuralNetworkRb.shuffle(data, target, 1234)
       expect(data.shape).to eql(result[0].shape)
       expect(target.shape).to eql(result[1].shape)
     end

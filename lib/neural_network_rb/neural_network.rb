@@ -7,13 +7,17 @@ module NeuralNetworkRb
     def input=(input)
       @input = input/255.0
       input_width = input.shape[1]
-      @w_hidden = Numo::DFloat.new(input_width,  @neurons_count).rand
+      @w1 = (Numo::DFloat.new(input_width,  @neurons_count).rand - 
+             Numo::DFloat.ones(input_width,  @neurons_count)/2) * 0.01 / Math.sqrt(input_width)
+      @b1 = Numo::DFloat.zeros(@neurons_count)
     end
 
     def target=(target)
       @target = target
       output_width = target.shape[1]
-      @w_output = Numo::DFloat.new(@neurons_count, output_width).rand
+      @w2 = (Numo::DFloat.new(@neurons_count, output_width).rand -
+             Numo::DFloat.ones(@neurons_count, output_width)/2) * 0.01 / Math.sqrt(@neurons_count)
+      @b2 = Numo::DFloat.zeros(output_width)
     end
 
     def initialize(neurons_count, learning_rate, random_seed)
@@ -24,25 +28,34 @@ module NeuralNetworkRb
     end
 
     def fit()
-      # forward
-      @hidden = NeuralNetworkRb.sigmoid(Numo::Linalg.matmul(@input, @w_hidden))
-
-      @output = NeuralNetworkRb.softmax(Numo::Linalg.matmul(@hidden, @w_output))
-
-      # calculate error
-      error_algorithm = :plain_diff
-      error = NeuralNetworkRb.send(error_algorithm, @target,  @output)
-
-      # backward 
-      dZ = error * @learning_rate
-
-      @w_output += Numo::Linalg.matmul(@hidden.transpose, dZ)
-      dH         = Numo::Linalg.matmul(dZ, @w_output.transpose) * NeuralNetworkRb.sigmoid_prime(@hidden)
-      @w_hidden += Numo::Linalg.matmul(@input.transpose, dH)
-
+      forward
+      backprop
       @epoch += 1 
       yield self if block_given?
     end
 
+    def forward
+      # forward
+      @hidden = NeuralNetworkRb.sigmoid(
+                  Numo::Linalg.matmul(@input, @w1) + 
+                  @b1)
+      @output = NeuralNetworkRb.softmax(
+                  Numo::Linalg.matmul(@hidden, @w2) + 
+                  @b2)
+    end
+
+    def backprop
+      # backward 
+      dZ   = NeuralNetworkRb.plain_diff(@target,  @output) 
+      @w2 += Numo::Linalg.matmul(@hidden.transpose, dZ) * @learning_rate
+      dH   = Numo::Linalg.matmul(dZ, @w2.transpose) * NeuralNetworkRb.sigmoid_prime(@hidden)
+      @w1 += Numo::Linalg.matmul(@input.transpose, dH) * @learning_rate
+    end
+
+    def predict(input)
+      hidden = NeuralNetworkRb.sigmoid(Numo::Linalg.matmul(input/255.0, @w1))
+      output = NeuralNetworkRb.softmax(Numo::Linalg.matmul(hidden, @w2))
+      output
+    end
   end
 end

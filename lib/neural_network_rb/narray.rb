@@ -2,9 +2,9 @@ module NeuralNetworkRb
 
   class << self
 
-    def shuffle(data, target)
+    def shuffle(data, target, seed)
       sample_size = data.shape[0]
-      new_order = Numo::DFloat[*(0..sample_size-1).to_a.shuffle]
+      new_order = Numo::DFloat[*(0..sample_size-1).to_a.shuffle(random: Random.new(seed))]
       [rows(data, new_order), rows(target, new_order)]
     end
 

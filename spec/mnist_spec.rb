@@ -73,7 +73,7 @@ RSpec.describe NeuralNetworkRb::MNIST do
       before do
         @pre_shuffle_data = @training_set.data[0..5, true].copy
         @pre_shuffle_labels = @training_set.labels[0..5].copy
-        @training_set.shuffle!
+        @training_set.shuffle!(1)
       end
 
       it 'changes the order of the data' do
@@ -133,28 +133,73 @@ RSpec.describe NeuralNetworkRb::MNIST do
     end
   end
 
-  describe 'train', focus: true do
-    let(:embedding)     { :one_hot }
-    let(:label_classes) { 10 }
-    let(:epochs)        { 2000 }
-    let(:neuron_count)  { 20 }
-    let(:learning_rate) { 0.005 }
-    let(:batches)       { 9 }
-    before do
-      @training_set = NeuralNetworkRb::MNIST.training_set
-                                            .shuffle!
-                                            .partition!(0.9)
-      @network = NeuralNetworkRb::NeuralNetwork.new(neuron_count, learning_rate, 4567)
-    end
+  # describe 'train' do
+  #   let(:embedding)     { :one_hot }
+  #   let(:label_classes) { 10 }
+  #   let(:epochs)        { 10000 }
+  #   let(:neuron_count)  { 40 }
+  #   let(:learning_rate) { 0.01 }
+  #   let(:batches)       { 9 }
+  #   let(:random_seed)   { 4567 }
+  #   before do
+  #     @training_set = NeuralNetworkRb::MNIST.training_set
+  #                                           .shuffle!(random_seed)
+  #                                           .partition!(0.9)
+  #     @test_set     = NeuralNetworkRb::MNIST.test_set
+  #     @network = NeuralNetworkRb::NeuralNetwork.new(neuron_count, learning_rate, random_seed)
+  #   end
 
-    it 'runs the training loop' do
-      data, labels = *(@training_set.batches(batches)[0])
-      @network.input = data
-      @network.target = NeuralNetworkRb::MNIST.embed_labels(labels, :one_hot, label_classes)
+  #   it 'runs the training loop' do
+  #     data, labels = *(@training_set.batches(batches)[0])
+  #     @network.input = data
+  #     @network.target = NeuralNetworkRb::MNIST.embed_labels(labels, :one_hot, label_classes)
 
-      epochs.times { @network.fit() { |n| puts "#{n.epoch}: #{NeuralNetworkRb.accuracy(n.output, labels)}" if (n.epoch % 10 == 1)  } }
-    end
-  end
+  #     epochs.times do 
+  #       @network.fit() do |n| 
+  #         if (n.epoch % 10 == 1) 
+  #           test_accurancy = NeuralNetworkRb.accuracy(@network.predict(@test_set.data), @test_set.labels)
+  #           entropy = NeuralNetworkRb.cross_entropy(n.output, n.target)
+  #           puts "#{n.epoch}: entropy: #{entropy} #{NeuralNetworkRb.accuracy(n.output, labels)} test: #{test_accurancy}"  
+  #         end
+  #       end
+  #     end 
+
+  #   end
+  # end
+
+  # describe 'train with rack', focus: true do
+  #   let(:embedding)     { :one_hot }
+  #   let(:epochs)        { 100000 }
+  #   let(:learning_rate) { 0.01 }
+  #   let(:batches)       { 900 }
+  #   let(:random_seed)   { 4567 }
+
+  #   let(:rack) {  
+  #     NeuralNetworkRb::NeuralNetwork::Builder.new do 
+  #       use NeuralNetworkRb::Activations::Dot, width: 15, name: :dot1, learning_rate: 0.002
+  #       use NeuralNetworkRb::Activations::Sigmoid
+  #       use NeuralNetworkRb::Activations::Dot, width: 10, name: :dot2, learning_rate: 0.002
+  #       use NeuralNetworkRb::Loss::SoftmaxCrossEntropy
+  #       use NeuralNetworkRb::Loss::CrossEntropyFetch, every: 100 do |epoch, error|
+  #         puts "#{epoch} #{error}"
+  #       end
+  #     end
+  #   }
+  #   let!(:network) { rack.to_network }
+    
+  #   before do
+  #     @training_set = NeuralNetworkRb::MNIST.training_set
+  #                                           .shuffle!(random_seed)
+  #                                           .partition!(0.9)
+  #     @test_set     = NeuralNetworkRb::MNIST.test_set
+  #   end
+
+  #   it 'runs the training loop' do
+  #     input, labels = *(@training_set.batches(batches)[0])
+  #     target = NeuralNetworkRb::MNIST.embed_labels(labels, :one_hot, 10)
+  #     epochs.times { network.train(input, target) }
+  #   end
+  # end
 
 end
 

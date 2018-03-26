@@ -13,6 +13,14 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 
-  config.filter_run :focus => true
+  # config.filter_run :focus => true
 end
 
+
+module NArrayComparator 
+  class << self
+    def equal(exp, obs, delta = 1e-6)
+      (exp.shape == obs.shape) && ((exp - obs).abs < delta).all?
+    end
+  end
+end

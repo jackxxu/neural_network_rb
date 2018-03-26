@@ -66,8 +66,8 @@ module NeuralNetworkRb
       end
     end
     
-    def shuffle!
-      @data, @labels = NeuralNetworkRb.shuffle(@data, @labels)
+    def shuffle!(seed)
+      @data, @labels = NeuralNetworkRb.shuffle(@data, @labels, seed)
       self
     end
 
