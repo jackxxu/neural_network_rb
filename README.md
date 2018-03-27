@@ -9,15 +9,18 @@ Neural network's forward and backward propagation bears a lot of resemblance to 
 
 With a Rack-inspired syntax of the following, you can construct the network like the following
 ```ruby 
-NeuralNetworkRb::NeuralNetwork::Builder.new do 
-    use NeuralNetworkRb::Activations::Dot, width: 15, learning_rate: 0.002
-    use NeuralNetworkRb::Activations::Sigmoid
-    use NeuralNetworkRb::Activations::Dot, width: 10, learning_rate: 0.002
-    use NeuralNetworkRb::Loss::SoftmaxCrossEntropy
-    use NeuralNetworkRb::Loss::CrossEntropyFetch, every: 100 do |epoch, error|
-        puts "#{epoch} #{error}"
-    end
-end
+builder = NeuralNetworkRb::NeuralNetwork::Builder.new do 
+            use NeuralNetworkRb::Activations::Dot, width: 15, learning_rate: 0.002
+            use NeuralNetworkRb::Activations::Sigmoid
+            use NeuralNetworkRb::Activations::Dot, width: 10, learning_rate: 0.002
+            use NeuralNetworkRb::Loss::SoftmaxCrossEntropy
+            use NeuralNetworkRb::Loss::CrossEntropyFetch, every: 100 do |epoch, error|
+                puts "#{epoch} #{error}"
+            end
+        end
+network = builder.to_network                  # get the network
+epochs.times { network.train(input, target) } # train the network many times
+network.predict(test)                         # predict 
 ```
 
 ```
@@ -52,7 +55,7 @@ end
 ## Design Considerations
 
 1. modular design and reusability
-2. easy to understand the code and the process.
+2. easily understandable code & process.
 
 ## Installation
 
