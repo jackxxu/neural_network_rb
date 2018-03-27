@@ -26,9 +26,6 @@ module NeuralNetworkRb
         @app = layer
       end
 
-      def train(input, target)
-
-      end
     end
     
   end

@@ -167,39 +167,41 @@ RSpec.describe NeuralNetworkRb::MNIST do
   #   end
   # end
 
-  # describe 'train with rack', focus: true do
-  #   let(:embedding)     { :one_hot }
-  #   let(:epochs)        { 100000 }
-  #   let(:learning_rate) { 0.01 }
-  #   let(:batches)       { 900 }
-  #   let(:random_seed)   { 4567 }
+  describe 'train with rack', focus: true do
+    let(:embedding)     { :one_hot }
+    let(:epochs)        { 10000 }
+    let(:learning_rate) { 0.01 }
+    let(:batches)       { 90 }
+    let(:random_seed)   { 4567 }
 
-  #   let(:rack) {  
-  #     NeuralNetworkRb::NeuralNetwork::Builder.new do 
-  #       use NeuralNetworkRb::Activations::Dot, width: 15, name: :dot1, learning_rate: 0.002
-  #       use NeuralNetworkRb::Activations::Sigmoid
-  #       use NeuralNetworkRb::Activations::Dot, width: 10, name: :dot2, learning_rate: 0.002
-  #       use NeuralNetworkRb::Loss::SoftmaxCrossEntropy
-  #       use NeuralNetworkRb::Loss::CrossEntropyFetch, every: 100 do |epoch, error|
-  #         puts "#{epoch} #{error}"
-  #       end
-  #     end
-  #   }
-  #   let!(:network) { rack.to_network }
+    let(:rack) {  
+      NeuralNetworkRb::NeuralNetwork::Builder.new do 
+        neuron_count = 100
+        use NeuralNetworkRb::Activations::Dot, width: neuron_count, name: :dot1, learning_rate: 0.02
+        use NeuralNetworkRb::Activations::Sigmoid
+        use NeuralNetworkRb::Activations::Dot, width: 10, name: :dot2, learning_rate: 0.02
+        use NeuralNetworkRb::Loss::SoftmaxCrossEntropy
+        use NeuralNetworkRb::Loss::CrossEntropyFetch, every: 100 do |epoch, error|
+          puts "#{epoch} #{error}"
+        end
+      end
+    }
+    let!(:network) { rack.to_network }
     
-  #   before do
-  #     @training_set = NeuralNetworkRb::MNIST.training_set
-  #                                           .shuffle!(random_seed)
-  #                                           .partition!(0.9)
-  #     @test_set     = NeuralNetworkRb::MNIST.test_set
-  #   end
+    before do
+      @training_set = NeuralNetworkRb::MNIST.training_set
+                                            .shuffle!(random_seed)
+                                            .partition!(0.9)
+      @test_set     = NeuralNetworkRb::MNIST.test_set
+    end
 
-  #   it 'runs the training loop' do
-  #     input, labels = *(@training_set.batches(batches)[0])
-  #     target = NeuralNetworkRb::MNIST.embed_labels(labels, :one_hot, 10)
-  #     epochs.times { network.train(input, target) }
-  #   end
-  # end
-
+    it 'runs the training loop' do
+      input, labels = *(@training_set.batches(batches)[0])
+      target = NeuralNetworkRb::MNIST.embed_labels(labels, :one_hot, 10)
+      epochs.times { network.train(input, target) }
+      test_accurancy = NeuralNetworkRb.accuracy(network.predict(@test_set.data), @test_set.labels)
+      puts test_accurancy
+    end
+  end
 end
 
