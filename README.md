@@ -17,7 +17,7 @@ builder = NeuralNetworkRb::NeuralNetwork::Builder.new do
             use NeuralNetworkRb::Loss::CrossEntropyFetch, every: 100 do |epoch, error|
                 puts "#{epoch} #{error}"
             end
-        end
+          end
 network = builder.to_network                  # get the network
 epochs.times { network.train(input, target) } # train the network many times
 network.predict(test)                         # predict 
@@ -38,15 +38,15 @@ The syntax for having more layers is very straightforward:
 
 ```ruby 
 NeuralNetworkRb::NeuralNetwork::Builder.new do 
-    use NeuralNetworkRb::Activations::Dot, width: 15, learning_rate: 0.002
-    5.times do 
-        use NeuralNetworkRb::Activations::Sigmoid
-        use NeuralNetworkRb::Activations::Dot, width: 10, learning_rate: 0.002
-    end
-    use NeuralNetworkRb::Loss::SoftmaxCrossEntropy
-    use NeuralNetworkRb::Loss::CrossEntropyFetch, every: 100 do |epoch, error|
-        puts "#{epoch} #{error}"
-    end
+  use NeuralNetworkRb::Activations::Dot, width: 15, learning_rate: 0.002
+  5.times do 
+    use NeuralNetworkRb::Activations::Sigmoid
+    use NeuralNetworkRb::Activations::Dot, width: 10, learning_rate: 0.002
+  end
+  use NeuralNetworkRb::Loss::SoftmaxCrossEntropy
+  use NeuralNetworkRb::Loss::CrossEntropyFetch, every: 100 do |epoch, error|
+    puts "#{epoch} #{error}"
+  end
 end
 ```
 
