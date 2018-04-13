@@ -170,7 +170,7 @@ RSpec.describe NeuralNetworkRb::MNIST do
   describe 'train with rack' do
     let(:embedding)     { :one_hot }
     let(:epochs)        { 10000 }
-    let(:batches)       { 9 }
+    let(:batches)       { 90 }
     let(:random_seed)   { 4567 }
 
     let(:rack) {  
@@ -196,9 +196,12 @@ RSpec.describe NeuralNetworkRb::MNIST do
     end
 
     it 'runs the training loop' do
-      input, labels = *(@training_set.batches(batches)[0])
-      target = NeuralNetworkRb::MNIST.embed_labels(labels, :one_hot, 10)
-      epochs.times { network.train(input, target) }
+      train_data = @training_set.batches(batches).map {|x| [x[0], NeuralNetworkRb::MNIST.embed_labels(x[1], :one_hot, 10)]}
+      epochs.times do |epoch|
+        batch = epoch % batches
+        input, target = *(train_data[batch])
+        network.train(input, target) 
+      end
       test_accurancy = NeuralNetworkRb.accuracy(network.predict(@test_set.data), @test_set.labels)
       puts test_accurancy
     end
