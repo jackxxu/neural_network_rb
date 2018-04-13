@@ -170,8 +170,9 @@ RSpec.describe NeuralNetworkRb::MNIST do
   describe 'train with rack' do
     let(:embedding)     { :one_hot }
     let(:epochs)        { 10000 }
-    let(:batches)       { 90 }
     let(:random_seed)   { 4567 }
+    let(:batch_size)    { 40 }
+    let(:data_ratio)    { 0.9 }
 
     let(:rack) {  
       NeuralNetworkRb::NeuralNetwork::Builder.new do 
@@ -191,16 +192,17 @@ RSpec.describe NeuralNetworkRb::MNIST do
     before do
       @training_set = NeuralNetworkRb::MNIST.training_set
                                             .shuffle!(random_seed)
-                                            .partition!(0.9)
+                                            .partition!(data_ratio)
       @test_set     = NeuralNetworkRb::MNIST.test_set
+      @training_cnt = @training_set.data.shape[0]
     end
 
     it 'runs the training loop' do
-      train_data = @training_set.batches(batches).map {|x| [x[0], NeuralNetworkRb::MNIST.embed_labels(x[1], :one_hot, 10)]}
+      targets = NeuralNetworkRb::MNIST.embed_labels(@training_set.labels, :one_hot, 10)
+      inputs  = @training_set.data
       epochs.times do |epoch|
-        batch = epoch % batches
-        input, target = *(train_data[batch])
-        network.train(input, target) 
+        indexes = Numo::Int32.new(batch_size).rand(0, @training_cnt).to_a
+        network.train(inputs[indexes, true], targets[indexes, true]) 
       end
       test_accurancy = NeuralNetworkRb.accuracy(network.predict(@test_set.data), @test_set.labels)
       puts test_accurancy
