@@ -169,18 +169,18 @@ RSpec.describe NeuralNetworkRb::MNIST do
 
   describe 'train with rack' do
     let(:embedding)     { :one_hot }
-    let(:epochs)        { 10000 }
+    let(:epochs)        { 50000 }
     let(:random_seed)   { 4567 }
     let(:batch_size)    { 40 }
     let(:data_ratio)    { 0.9 }
 
     let(:rack) {  
       NeuralNetworkRb::NeuralNetwork::Builder.new do 
-        neuron_count = 10
+        neuron_count = 100
         learning_rate = 0.001
         use NeuralNetworkRb::Activations::Dot, width: neuron_count, name: :dot1, learning_rate: learning_rate
-        # use NeuralNetworkRb::Activations::Sigmoid
-        # use NeuralNetworkRb::Activations::Dot, width: 10, name: :dot2, learning_rate: learning_rate
+        use NeuralNetworkRb::Activations::Sigmoid
+        use NeuralNetworkRb::Activations::Dot, width: 10, name: :dot2, learning_rate: learning_rate
         use NeuralNetworkRb::Loss::SoftmaxCrossEntropy
         use NeuralNetworkRb::Loss::CrossEntropyFetch, every: 100 do |epoch, error|
           puts "#{epoch} #{error}"

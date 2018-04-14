@@ -27,7 +27,7 @@ module NeuralNetworkRb
       end
 
       def calc(x)
-        1/(1+ Numo::NMath.exp(-(x - x.max(axis: 1, keepdims: true))))
+        1 / (1+ Numo::NMath.exp(-x))
       end
   
       def grad(output)
