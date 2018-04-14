@@ -1,7 +1,7 @@
-RSpec.describe NeuralNetworkRb::Loss::SoftmaxCrossEntropy do
+RSpec.describe NeuralNetworkRb::Layer::SoftmaxCrossEntropy do
 
   let(:width) { 20 }
-  let(:layer) { NeuralNetworkRb::Loss::SoftmaxCrossEntropy.new(nil) }
+  let(:layer) { NeuralNetworkRb::Layer::SoftmaxCrossEntropy.new(nil) }
 
   describe 'initialization', focus: true do
     it 'can initialize' do

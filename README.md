@@ -10,11 +10,11 @@ Neural network's forward and backward propagation bears a lot of resemblance to 
 With a Rack-inspired syntax of the following, you can construct the network like the following
 ```ruby 
 builder = NeuralNetworkRb::NeuralNetwork::Builder.new do 
-            use NeuralNetworkRb::Activations::Dot, width: 15, learning_rate: 0.002
-            use NeuralNetworkRb::Activations::Sigmoid
-            use NeuralNetworkRb::Activations::Dot, width: 10, learning_rate: 0.002
-            use NeuralNetworkRb::Loss::SoftmaxCrossEntropy
-            use NeuralNetworkRb::Loss::CrossEntropyFetch, every: 100 do |epoch, error|
+            use NeuralNetworkRb::Layer::Dot, width: 15, learning_rate: 0.002
+            use NeuralNetworkRb::Layer::Sigmoid
+            use NeuralNetworkRb::Layer::Dot, width: 10, learning_rate: 0.002
+            use NeuralNetworkRb::Layer::SoftmaxCrossEntropy
+            use NeuralNetworkRb::Layer::CrossEntropyFetch, every: 100 do |epoch, error|
                 puts "#{epoch} #{error}"
             end
           end
@@ -38,13 +38,13 @@ The syntax for having more layers is very straightforward:
 
 ```ruby 
 NeuralNetworkRb::NeuralNetwork::Builder.new do 
-  use NeuralNetworkRb::Activations::Dot, width: 15, learning_rate: 0.002
+  use NeuralNetworkRb::Layer::Dot, width: 15, learning_rate: 0.002
   5.times do 
-    use NeuralNetworkRb::Activations::Sigmoid
-    use NeuralNetworkRb::Activations::Dot, width: 10, learning_rate: 0.002
+    use NeuralNetworkRb::Layer::Sigmoid
+    use NeuralNetworkRb::Layer::Dot, width: 10, learning_rate: 0.002
   end
-  use NeuralNetworkRb::Loss::SoftmaxCrossEntropy
-  use NeuralNetworkRb::Loss::CrossEntropyFetch, every: 100 do |epoch, error|
+  use NeuralNetworkRb::Layer::SoftmaxCrossEntropy
+  use NeuralNetworkRb::Layer::CrossEntropyFetch, every: 100 do |epoch, error|
     puts "#{epoch} #{error}"
   end
 end

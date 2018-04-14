@@ -1,7 +1,5 @@
-require_relative 'activations'
-
 module NeuralNetworkRb
-  module Activations
+  module Layer
     class Sigmoid
 
       def initialize(next_layer, options = {})

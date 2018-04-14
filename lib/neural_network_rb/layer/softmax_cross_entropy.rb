@@ -1,5 +1,5 @@
 module NeuralNetworkRb
-  module Loss
+  module Layer
     class SoftmaxCrossEntropy
 
       def initialize(next_layer, options = {})

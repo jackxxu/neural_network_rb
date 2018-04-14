@@ -9,7 +9,7 @@ RSpec.describe NeuralNetworkRb::NeuralNetwork::Builder do
     context 'one layer network' do
       let(:rack) {
         NeuralNetworkRb::NeuralNetwork::Builder.new do
-          use NeuralNetworkRb::Loss::SoftmaxCrossEntropy
+          use NeuralNetworkRb::Layer::SoftmaxCrossEntropy
         end
       }
 
@@ -18,7 +18,7 @@ RSpec.describe NeuralNetworkRb::NeuralNetwork::Builder do
       end
 
       it 'has one layer with the specfied class' do
-        expect(rack.layers[0][0]).to eql(NeuralNetworkRb::Loss::SoftmaxCrossEntropy)
+        expect(rack.layers[0][0]).to eql(NeuralNetworkRb::Layer::SoftmaxCrossEntropy)
       end
 
       it 'has empty named layers' do
@@ -37,7 +37,7 @@ RSpec.describe NeuralNetworkRb::NeuralNetwork::Builder do
       context 'named_layer networked' do
         let(:rack) {
           NeuralNetworkRb::NeuralNetwork::Builder.new do 
-            use NeuralNetworkRb::Loss::SoftmaxCrossEntropy, name: :loss
+            use NeuralNetworkRb::Layer::SoftmaxCrossEntropy, name: :loss
           end
         }
         let!(:network) { rack.to_network }
@@ -47,7 +47,7 @@ RSpec.describe NeuralNetworkRb::NeuralNetwork::Builder do
         end
 
         it 'has the same layer in named and normal list of layers' do
-          expect(rack.named_layers[:loss].class).to be(NeuralNetworkRb::Loss::SoftmaxCrossEntropy)
+          expect(rack.named_layers[:loss].class).to be(NeuralNetworkRb::Layer::SoftmaxCrossEntropy)
         end
       end
     end
@@ -56,11 +56,11 @@ RSpec.describe NeuralNetworkRb::NeuralNetwork::Builder do
     context 'multiple layer network' do
       let(:rack) {  
         NeuralNetworkRb::NeuralNetwork::Builder.new do 
-          use NeuralNetworkRb::Activations::Dot, width: 20, name: :dot1, learning_rate: 1
-          use NeuralNetworkRb::Activations::Sigmoid
-          use NeuralNetworkRb::Activations::Dot, width: 2, name: :dot2, learning_rate: 1
-          use NeuralNetworkRb::Loss::SoftmaxCrossEntropy
-          use NeuralNetworkRb::Loss::CrossEntropyFetch, every: 100 do |error|
+          use NeuralNetworkRb::Layer::Dot, width: 20, name: :dot1, learning_rate: 1
+          use NeuralNetworkRb::Layer::Sigmoid
+          use NeuralNetworkRb::Layer::Dot, width: 2, name: :dot2, learning_rate: 1
+          use NeuralNetworkRb::Layer::SoftmaxCrossEntropy
+          use NeuralNetworkRb::Layer::CrossEntropyFetch, every: 100 do |error|
             puts error
           end
         end
@@ -75,11 +75,11 @@ RSpec.describe NeuralNetworkRb::NeuralNetwork::Builder do
 
       it 'has all the layers in the specified order' do
         expect(layer_classes).to eq([
-          NeuralNetworkRb::Loss::CrossEntropyFetch,
-          NeuralNetworkRb::Loss::SoftmaxCrossEntropy,
-          NeuralNetworkRb::Activations::Dot,
-          NeuralNetworkRb::Activations::Sigmoid,
-          NeuralNetworkRb::Activations::Dot
+          NeuralNetworkRb::Layer::CrossEntropyFetch,
+          NeuralNetworkRb::Layer::SoftmaxCrossEntropy,
+          NeuralNetworkRb::Layer::Dot,
+          NeuralNetworkRb::Layer::Sigmoid,
+          NeuralNetworkRb::Layer::Dot
         ])
       end
 

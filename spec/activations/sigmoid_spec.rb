@@ -1,7 +1,7 @@
-RSpec.describe NeuralNetworkRb::Activations::Sigmoid do
+RSpec.describe NeuralNetworkRb::Layer::Sigmoid do
 
   let(:next_layer) { double("foo", train: 1, grad: 1 ) }
-  let(:rack) { NeuralNetworkRb::Activations::Sigmoid.new(next_layer) }
+  let(:rack) { NeuralNetworkRb::Layer::Sigmoid.new(next_layer) }
 
   describe '.calc', focus: true do
 

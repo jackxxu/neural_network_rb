@@ -133,43 +133,9 @@ RSpec.describe NeuralNetworkRb::MNIST do
     end
   end
 
-  describe 'train' do
-    let(:embedding)     { :one_hot }
-    let(:label_classes) { 10 }
-    let(:epochs)        { 2000 }
-    let(:neuron_count)  { 40 }
-    let(:learning_rate) { 0.005 }
-    let(:batches)       { 9 }
-    let(:random_seed)   { 4567 }
-    before do
-      @training_set = NeuralNetworkRb::MNIST.training_set
-                                            .shuffle!(random_seed)
-                                            .partition!(0.9)
-      @test_set     = NeuralNetworkRb::MNIST.test_set
-      @network = NeuralNetworkRb::NeuralNetwork.new(neuron_count, learning_rate, random_seed)
-    end
-
-    it 'runs the training loop' do
-      data, labels = *(@training_set.batches(batches)[0])
-      @network.input = data
-      @network.target = NeuralNetworkRb::MNIST.embed_labels(labels, :one_hot, label_classes)
-
-      epochs.times do 
-        @network.fit() do |n| 
-          if (n.epoch % 10 == 1) 
-            test_accurancy = NeuralNetworkRb.accuracy(@network.predict(@test_set.data), @test_set.labels)
-            entropy = NeuralNetworkRb.cross_entropy(n.output, n.target)
-            puts "#{n.epoch}: entropy: #{entropy} #{NeuralNetworkRb.accuracy(n.output, labels)} test: #{test_accurancy}"  
-          end
-        end
-      end 
-
-    end
-  end
-
   describe 'train with rack' do
     let(:embedding)     { :one_hot }
-    let(:epochs)        { 50000 }
+    let(:epochs)        { 100000 }
     let(:random_seed)   { 4567 }
     let(:batch_size)    { 40 }
     let(:data_ratio)    { 0.9 }
@@ -178,11 +144,11 @@ RSpec.describe NeuralNetworkRb::MNIST do
       NeuralNetworkRb::NeuralNetwork::Builder.new do 
         neuron_count = 100
         learning_rate = 0.001
-        use NeuralNetworkRb::Activations::Dot, width: neuron_count, name: :dot1, learning_rate: learning_rate
-        use NeuralNetworkRb::Activations::Sigmoid
-        use NeuralNetworkRb::Activations::Dot, width: 10, name: :dot2, learning_rate: learning_rate
-        use NeuralNetworkRb::Loss::SoftmaxCrossEntropy
-        use NeuralNetworkRb::Loss::CrossEntropyFetch, every: 100 do |epoch, error|
+        use NeuralNetworkRb::Layer::Dot, width: neuron_count, name: :dot1, learning_rate: learning_rate
+        use NeuralNetworkRb::Layer::Sigmoid
+        use NeuralNetworkRb::Layer::Dot, width: 10, name: :dot2, learning_rate: learning_rate
+        use NeuralNetworkRb::Layer::SoftmaxCrossEntropy
+        use NeuralNetworkRb::Layer::CrossEntropyFetch, every: 100 do |epoch, error|
           puts "#{epoch} #{error}"
         end
       end

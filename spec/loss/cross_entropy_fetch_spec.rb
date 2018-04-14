@@ -1,4 +1,4 @@
-RSpec.describe NeuralNetworkRb::Loss::CrossEntropyFetch, focus: true do
+RSpec.describe NeuralNetworkRb::Layer::CrossEntropyFetch, focus: true do
 
   let(:epoches_count) { 100 }
   let(:input)         { Numo::DFloat[[0, 0], [0, 1], [1, 0], [1, 1]] }
@@ -9,11 +9,11 @@ RSpec.describe NeuralNetworkRb::Loss::CrossEntropyFetch, focus: true do
     let(:x) { nil }
     let(:rack) {  
       NeuralNetworkRb::NeuralNetwork::Builder.new do 
-        use NeuralNetworkRb::Activations::Dot, width: 20, name: :dot1, learning_rate: 1
-        use NeuralNetworkRb::Activations::Sigmoid
-        use NeuralNetworkRb::Activations::Dot, width: 2, name: :dot2, learning_rate: 1
-        use NeuralNetworkRb::Loss::SoftmaxCrossEntropy
-        use NeuralNetworkRb::Loss::CrossEntropyFetch, every: 100 do |error| 
+        use NeuralNetworkRb::Layer::Dot, width: 20, name: :dot1, learning_rate: 1
+        use NeuralNetworkRb::Layer::Sigmoid
+        use NeuralNetworkRb::Layer::Dot, width: 2, name: :dot2, learning_rate: 1
+        use NeuralNetworkRb::Layer::SoftmaxCrossEntropy
+        use NeuralNetworkRb::Layer::CrossEntropyFetch, every: 100 do |error| 
           x = error
         end
       end
@@ -28,11 +28,11 @@ RSpec.describe NeuralNetworkRb::Loss::CrossEntropyFetch, focus: true do
 
     it 'has all the layers in the specified order' do
       expect(layer_classes).to eq([
-        NeuralNetworkRb::Loss::CrossEntropyFetch,
-        NeuralNetworkRb::Loss::SoftmaxCrossEntropy,
-        NeuralNetworkRb::Activations::Dot,
-        NeuralNetworkRb::Activations::Sigmoid,
-        NeuralNetworkRb::Activations::Dot
+        NeuralNetworkRb::Layer::CrossEntropyFetch,
+        NeuralNetworkRb::Layer::SoftmaxCrossEntropy,
+        NeuralNetworkRb::Layer::Dot,
+        NeuralNetworkRb::Layer::Sigmoid,
+        NeuralNetworkRb::Layer::Dot
       ])
     end
 

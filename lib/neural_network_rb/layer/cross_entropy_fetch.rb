@@ -1,5 +1,5 @@
 module NeuralNetworkRb
-  module Loss
+  module Layer
     class CrossEntropyFetch
 
       attr_reader :epoch

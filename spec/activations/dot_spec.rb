@@ -1,7 +1,7 @@
-RSpec.describe NeuralNetworkRb::Activations::Dot do
+RSpec.describe NeuralNetworkRb::Layer::Dot do
 
   let(:width) { 20 }
-  let(:layer) { NeuralNetworkRb::Activations::Dot.new(nil, width: width) }
+  let(:layer) { NeuralNetworkRb::Layer::Dot.new(nil, width: width) }
 
   describe 'initialization', focus: true do
 

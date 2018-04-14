@@ -1,7 +1,5 @@
-require_relative 'activations'
-
 module NeuralNetworkRb
-  module Activations
+  module Layer
     class Dot
 
       attr_reader :width, :height
