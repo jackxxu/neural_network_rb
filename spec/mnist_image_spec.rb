@@ -5,7 +5,7 @@ RSpec.describe NeuralNetworkRb::MNIST do
     before do
       @mist = NeuralNetworkRb::MNIST.training_set
       pixels = @mist.data[0, true]
-      NeuralNetworkRb::MNISTImage.new(pixels).save_to_file(file_name)
+      NeuralNetworkRb::MNIST::Image.new(pixels).save_to_file(file_name)
     end
     
     it 'saves to a png file' do
