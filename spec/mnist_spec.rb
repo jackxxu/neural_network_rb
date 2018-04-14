@@ -157,6 +157,7 @@ RSpec.describe NeuralNetworkRb::MNIST do
     
     before do
       @training_set = NeuralNetworkRb::MNIST.training_set
+                                            .normalize!
                                             .shuffle!(random_seed)
                                             .partition!(data_ratio)
       @test_set     = NeuralNetworkRb::MNIST.test_set

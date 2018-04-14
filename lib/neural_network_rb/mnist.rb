@@ -53,8 +53,13 @@ module NeuralNetworkRb
     attr_accessor :labels, :data, :validation_data, :validation_labels
 
     def initialize(data_file = nil, label_file = nil)
-      @labels = get_labels(label_file)       if label_file
-      @data   = get_images(data_file)/256.0  if data_file
+      @labels = get_labels(label_file) if label_file
+      @data   = get_images(data_file)  if data_file
+    end
+
+    def normalize!
+      @data = @data / (@data.max + 1.0) 
+      self
     end
 
     def clone
