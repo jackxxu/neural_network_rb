@@ -135,24 +135,11 @@ RSpec.describe NeuralNetworkRb::MNIST do
 
   describe 'train with rack' do
     let(:embedding)     { :one_hot }
-    let(:epochs)        { 100000 }
+    let(:epochs)        { 50000 }
     let(:random_seed)   { 4567 }
     let(:batch_size)    { 40 }
     let(:data_ratio)    { 0.9 }
 
-    let(:rack) {  
-      NeuralNetworkRb::NeuralNetwork::Builder.new do 
-        neuron_count = 100
-        learning_rate = 0.001
-        use NeuralNetworkRb::Layer::Dot, width: neuron_count, name: :dot1, learning_rate: learning_rate
-        use NeuralNetworkRb::Layer::Sigmoid
-        use NeuralNetworkRb::Layer::Dot, width: 10, name: :dot2, learning_rate: learning_rate
-        use NeuralNetworkRb::Layer::SoftmaxCrossEntropy
-        use NeuralNetworkRb::Layer::CrossEntropyFetch, every: 100 do |epoch, error|
-          puts "#{epoch} #{error}"
-        end
-      end
-    }
     let!(:network) { rack.to_network }
     
     before do
@@ -164,16 +151,66 @@ RSpec.describe NeuralNetworkRb::MNIST do
       @training_cnt = @training_set.data.shape[0]
     end
 
-    it 'runs the training loop' do
-      targets = NeuralNetworkRb::MNIST.embed_labels(@training_set.labels, :one_hot, 10)
-      inputs  = @training_set.data
-      epochs.times do |epoch|
-        indexes = Numo::Int32.new(batch_size).rand(0, @training_cnt).to_a
-        network.train(inputs[indexes, true], targets[indexes, true]) 
+    context 'use sigmoid' do
+
+      let(:rack) {  
+        NeuralNetworkRb::NeuralNetwork::Builder.new do 
+          neuron_count = 100
+          learning_rate = 0.001
+          use NeuralNetworkRb::Layer::Dot, width: neuron_count, name: :dot1, learning_rate: learning_rate
+          use NeuralNetworkRb::Layer::Sigmoid
+          use NeuralNetworkRb::Layer::Dot, width: 10, name: :dot2, learning_rate: learning_rate
+          use NeuralNetworkRb::Layer::SoftmaxCrossEntropy
+          use NeuralNetworkRb::Layer::CrossEntropyFetch, every: 100 do |epoch, error|
+            print "#{epoch} #{error}\r"
+            $stdout.flush
+          end
+        end
+      }
+  
+      it 'runs the training loop' do
+        targets = NeuralNetworkRb::MNIST.embed_labels(@training_set.labels, :one_hot, 10)
+        inputs  = @training_set.data
+        epochs.times do |epoch|
+          indexes = Numo::Int32.new(batch_size).rand(0, @training_cnt).to_a
+          network.train(inputs[indexes, true], targets[indexes, true]) 
+        end
+        test_accurancy = NeuralNetworkRb.accuracy(network.predict(@test_set.data), @test_set.labels)
+        puts test_accurancy # => 0.9637
       end
-      test_accurancy = NeuralNetworkRb.accuracy(network.predict(@test_set.data), @test_set.labels)
-      puts test_accurancy
+  
     end
+
+    context 'use relu' do
+
+      let(:rack) {  
+        NeuralNetworkRb::NeuralNetwork::Builder.new do 
+          neuron_count = 100
+          learning_rate = 0.001
+          use NeuralNetworkRb::Layer::Dot, width: neuron_count, name: :dot1, learning_rate: learning_rate
+          use NeuralNetworkRb::Layer::ReLU
+          use NeuralNetworkRb::Layer::Dot, width: 10, name: :dot2, learning_rate: learning_rate
+          use NeuralNetworkRb::Layer::SoftmaxCrossEntropy
+          use NeuralNetworkRb::Layer::CrossEntropyFetch, every: 100 do |epoch, error|
+            puts "#{epoch} #{error}"
+          end
+        end
+      }
+  
+      it 'runs the training loop' do
+        targets = NeuralNetworkRb::MNIST.embed_labels(@training_set.labels, :one_hot, 10)
+        inputs  = @training_set.data
+        epochs.times do |epoch|
+          indexes = Numo::Int32.new(batch_size).rand(0, @training_cnt).to_a
+          network.train(inputs[indexes, true], targets[indexes, true]) 
+        end
+
+        test_accurancy = NeuralNetworkRb.accuracy(network.predict(@test_set.data), @test_set.labels)
+        puts test_accurancy # => 0.9692 and beyond 60000, it breaks out convergence
+      end
+  
+    end
+
   end
 end
 
