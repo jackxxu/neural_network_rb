@@ -52,6 +52,23 @@ end
 
 [Rack]: https://github.com/rack/rack
 
+## Troubleshooting
+
+if you encounter an error message like the following
+
+```
+in `load_library': cannot find MKL/OpenBLAS/ATLAS/BLAS-LAPACK library (RuntimeError)
+```
+it is because your host doesn't have one of these math libraries installed. `numo-linalg` supports a list of these library and has [a benchmark] for their performance. 
+
+I fixed it on my macOS using the following brew install. 
+
+```
+brew install openblas
+```
+
+[a benchmark]: https://github.com/ruby-numo/numo-linalg/tree/master/bench
+
 ## Design Considerations
 
 1. modular design and reusability
